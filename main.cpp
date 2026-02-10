@@ -20,7 +20,7 @@ int main() {
 
     // add another element
     myList.append("Citrus");
-
+    cout << myList;
     // try inserting as an invalid operation
     try {
         myList.insert(5, "kweh");

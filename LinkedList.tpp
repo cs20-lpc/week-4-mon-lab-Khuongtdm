@@ -57,6 +57,26 @@ void LinkedList<T>::clear() {
 template <typename T>
 void LinkedList<T>::copy(const LinkedList<T>& copyObj) {
     // TODO
+    this->head = nullptr;
+    this->length = 0;
+    if (copyObj.head ==nullptr)
+        return;
+
+    this->head = new Node(copyObj.head->value);
+    this->length++;
+
+    Node* sourHead = copyObj.head->next;
+    Node* destHead = this->head;
+    while (sourHead != nullptr)
+    {
+        Node* newNode = new Node(sourHead->value);
+        destHead->next = newNode;
+        sourHead = sourHead->next;
+        destHead = destHead->next;
+        this->length++;
+    }
+    destHead->next = nullptr;
+    
 }
 
 template <typename T>
@@ -82,6 +102,39 @@ int LinkedList<T>::getLength() const {
 template <typename T>
 void LinkedList<T>::insert(int position, const T& elem) {
     // TODO
+    //empty list 
+    //
+    if (position < 0 || position>this->length )
+        throw string("out of index");
+    Node* curr = head;
+
+    if(curr == nullptr || position==this->length)
+    {
+        append(elem);
+        return;
+    }
+    Node* previous = head;
+    Node* newNode = new Node(elem);
+    /// in case when you insert at the beginning
+    if (position ==0)
+    {
+        head = newNode;
+        newNode->next = curr;
+        this->length++;
+        return;
+    }
+
+    for (int i = 0;i < position - 1;i++)
+    {
+        curr = curr->next;
+        previous = previous->next;
+    }
+    curr = curr->next;
+    previous->next = newNode;
+    newNode->next = curr;
+    this->length++;
+    return;
+
 }
 
 template <typename T>
@@ -92,11 +145,38 @@ bool LinkedList<T>::isEmpty() const {
 template <typename T>
 void LinkedList<T>::remove(int position) {
     // TODO
+    //out of index
+    if (position <0 || position >= this->length){
+        throw string("Out of index");
+        }
+    Node* curr = head;
+    //if there is no element in the list
+    if (curr == nullptr)
+        throw string("The linkedlist is empty\n");
+    if (position == 0)
+    {
+        Node* temp = head;
+        head = head->next;
+        delete temp;
+        this->length--;
+        return;
+    }
+    Node* previous = head;
+    for (int i = 0;i < position-1;i++)
+    {
+        curr = curr->next;
+        previous = previous->next;
+    }
+    curr = curr->next;
+    previous->next = curr->next;
+    delete curr;
+    this->length--;
+    return;
 }
 
 template <typename T>
 void LinkedList<T>::replace(int position, const T& elem) {
-    if (position < 0 || position >= this->length) {
+    if (position < 0 || position > this->length) {
         throw string("replace: error, position out of bounds");
     }
 
